@@ -1,0 +1,15 @@
+{% extends "base.html" %}{% block title %}Главная — Складской учёт{% endblock %}
+{% block content %}
+<h1>Панель складского учёта</h1><p class="muted">Сводная информация о товарах и складских операциях.</p>
+<div class="cards">
+<div class="card">Товары<div class="num">{{ product_count }}</div></div>
+<div class="card">Категории<div class="num">{{ category_count }}</div></div>
+<div class="card">Поставщики<div class="num">{{ supplier_count }}</div></div>
+<div class="card">Стоимость остатков<div class="num">{{ stock_value }} ₽</div></div>
+</div>
+<h2>Товары с низким остатком</h2><table><tr><th>Товар</th><th>Артикул</th><th>Остаток</th><th>Минимум</th></tr>
+{% for p in low_stock %}<tr><td>{{ p.name }}</td><td>{{ p.sku }}</td><td class="warn">{{ p.quantity }} {{ p.unit }}</td><td>{{ p.minimum_quantity }}</td></tr>{% empty %}<tr><td colspan="4">Нет товаров с низким остатком.</td></tr>{% endfor %}</table>
+<h2>Последние движения</h2><table><tr><th>Дата</th><th>Товар</th><th>Операция</th><th>Количество</th></tr>
+{% for m in recent_movements %}<tr><td>{{ m.created_at|date:"d.m.Y H:i" }}</td><td>{{ m.product.name }}</td><td>{{ m.get_movement_type_display }}</td><td>{{ m.quantity }}</td></tr>{% empty %}<tr><td colspan="4">Операций пока нет.</td></tr>{% endfor %}</table>
+<p><a class="btn" href="/admin/">Открыть администрирование</a></p>
+{% endblock %}
